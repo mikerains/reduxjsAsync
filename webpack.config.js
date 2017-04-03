@@ -1,3 +1,7 @@
+//
+// https://webpack.js.org/concepts/hot-module-replacement/
+// https://webpack.js.org/guides/hmr-react/
+
 var path = require('path');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var CleanWebpackPlugin = require('clean-webpack-plugin');
@@ -56,6 +60,8 @@ module.exports = {
                 use: [
                     'style-loader',
                     { loader: 'css-loader', options: { modules: true, importLoaders: 1 } },
+
+                    // https://github.com/postcss/postcss-loader/issues/92#issuecomment-280878821
                     {
                         loader: 'postcss-loader', options: {
                             plugins: function () {
