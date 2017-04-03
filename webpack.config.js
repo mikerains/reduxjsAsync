@@ -55,13 +55,18 @@ module.exports = {
                 exclude: /node_modules/
             },
             {
+                // error: "No PostCSS Config found in: C:\projects\mike\rxasync\src\components" 
+                // test: /\.css$/,
+                // use: ['style-loader', 'css-loader?modules', 'postcss-loader',],
+                
+                // solution: --> https://github.com/postcss/postcss-loader/issues/92#issuecomment-280878821
+                // another solution: https://github.com/akveo/ng2-admin/issues/604
                 test: /\.css$/,
-                //use: ['style-loader', 'css-loader?modules', 'postcss-loader',],
                 use: [
                     'style-loader',
                     { loader: 'css-loader', options: { modules: true, importLoaders: 1 } },
 
-                    // https://github.com/postcss/postcss-loader/issues/92#issuecomment-280878821
+
                     {
                         loader: 'postcss-loader', options: {
                             plugins: function () {
