@@ -1,21 +1,23 @@
 var path = require('path');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var CleanWebpackPlugin = require('clean-webpack-plugin');
+
 var webpack = require('webpack');
 
 module.exports = {
     devtool: "cheap-eval-source-map",
-    
     entry: {
-        bundle: "./src/index.js"
+        app: "./src/index.js"
     },
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: '[name].[chunkhash].js'
+        //filename: '[name].js',
     },
     module: {
         rules: [
-            {test: /\.(js|jsx)$/, 
+            {
+                test: /\.(js|jsx)$/,
                 exclude: /(node_modules|bower_components)/,
                 loader: 'babel-loader',
                 query: {
@@ -24,15 +26,16 @@ module.exports = {
             }
         ]
     },
+
     //plugins: [new HtmlWebpackPlugin({template: './src/index.html'})]
     plugins: [
-        // new CleanWebpackPlugin(['dist', 'build'], {
-        //     verbose: true,
-        //     dry: false,
-        //     exclude: ['shared.js']
-        // }),
+        new CleanWebpackPlugin(['dist', 'build'], {
+            verbose: true,
+            dry: false,
+            exclude: ['shared.js']
+        }),
         new HtmlWebpackPlugin({
-            title: 'Redux Reddit',
+            title: 'Custom template',
             template: './src/myindex.ejs', // Load a custom template (ejs by default see the FAQ for details)
         }),
         new webpack.optimize.CommonsChunkPlugin({

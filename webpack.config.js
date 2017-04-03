@@ -1,53 +1,85 @@
 var path = require('path');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var CleanWebpackPlugin = require('clean-webpack-plugin');
-
 var webpack = require('webpack');
 
 module.exports = {
     devtool: "cheap-eval-source-map",
-    entry: {
-        app: "./src/index.js"
-    },
+
+    entry: [
+        'react-hot-loader/patch',
+        // activate HMR for React
+
+        'webpack-dev-server/client?http://localhost:8080',
+        // bundle the client for webpack-dev-server
+        // and connect to the provided endpoint
+
+        'webpack/hot/only-dev-server',
+        // bundle the client for hot reloading
+        // only- means to only hot reload for successful updates
+
+        './src/index.js'
+        // the entry point of our app
+    ],
     output: {
+        filename: 'bundle.js',
+        // the output bundle
+
         path: path.resolve(__dirname, 'dist'),
-        filename: '[name].[chunkhash].js'
-        //filename: '[name].js',
+
+        publicPath: '/'
+        // necessary for HMR to know where to load the hot update chunks
     },
+
+    devServer: {
+        hot: true,
+        // enable HMR on the server
+
+        contentBase: path.resolve(__dirname, 'dist'),
+        // match the output path
+
+        publicPath: '/'
+        // match the output `publicPath`
+    },
+
+
     module: {
         rules: [
             {
-                test: /\.(js|jsx)$/,
-                exclude: /(node_modules|bower_components)/,
-                loader: 'babel-loader',
-                query: {
-                    presets: ['env']
-                }
-            }
-        ]
+                test: /\.jsx?$/,
+                use: ['babel-loader',],
+                exclude: /node_modules/
+            },
+            {
+                test: /\.css$/,
+                //use: ['style-loader', 'css-loader?modules', 'postcss-loader',],
+                use: [
+                    'style-loader',
+                    { loader: 'css-loader', options: { modules: true, importLoaders: 1 } },
+                    {
+                        loader: 'postcss-loader', options: {
+                            plugins: function () {
+                                return [
+                                    require('autoprefixer')
+                                ];
+                            }
+                        }
+                    },
+                ]
+            },
+        ],
     },
-
-    //plugins: [new HtmlWebpackPlugin({template: './src/index.html'})]
     plugins: [
-        new CleanWebpackPlugin(['dist', 'build'], {
-            verbose: true,
-            dry: false,
-            exclude: ['shared.js']
-        }),
-        new HtmlWebpackPlugin({
-            title: 'Custom template',
-            template: './src/myindex.ejs', // Load a custom template (ejs by default see the FAQ for details)
-        }),
-        new webpack.optimize.CommonsChunkPlugin({
-            name: "vendor",
-            minChunks: function (module) {
-                return module.context && module.context.indexOf("node_modules") !== -1;
-            }
-        }),
-        new webpack.optimize.CommonsChunkPlugin({
-            name: "manifest",
-            minChunks: Infinity
-        })]
-}
+        new webpack.HotModuleReplacementPlugin(),
+        // enable HMR globally
 
-//module.exports = config;
+        new webpack.NamedModulesPlugin(),
+        // prints more readable module names in the browser console on HMR updates
+
+        new HtmlWebpackPlugin({
+            title: 'Hot Module Reddit',
+            template: './src/myindex.ejs', // Load a custom template (ejs by default see the FAQ for details)
+        })
+        //, new webpack.LoaderOptionsPlugin({ options: { postcss: [ autoprefixer ] } })
+    ],
+}
