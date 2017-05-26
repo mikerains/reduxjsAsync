@@ -32,6 +32,7 @@ function receivePosts(subreddit, json) {
     subreddit,
     posts: json.data.children.map(child => child.data),
     receivedAt: Date.now()
+    //, subreddits: addReddit(subreddits, subreddit)
   }
 }
 

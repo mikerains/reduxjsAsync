@@ -4,6 +4,7 @@ import configureStore from '../configureStore'
 import AsyncApp from './AsyncApp'
 //import styles from './App.css';
 
+//const store = configureStore({selectedSubreddit: "frontend", postsBySubreddit: {subreddits: [ 'reactjs', 'frontend', 'Spock' ]}})
 const store = configureStore()
 
 export default class Root extends Component {
