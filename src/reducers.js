@@ -13,20 +13,11 @@ function selectedSubreddit(state = 'reactjs', action) {
   }
 }
 
-function addReddit(subreddits, subreddit) {
-  if (subreddits[subreddit]==null) {
-    subreddits.push(subreddit);
-  }
-  return subreddits;
-}
-
 function posts(state = {
   isFetching: false,
   didInvalidate: false,
   items: []
 }, action) {
-    console.log('postsBySubreddit use of post found state:');
-  console.log(state);
   switch (action.type) {
     case INVALIDATE_SUBREDDIT:
       return Object.assign({}, state, {
@@ -42,15 +33,14 @@ function posts(state = {
         isFetching: false,
         didInvalidate: false,
         items: action.posts,
-        lastUpdated: action.receivedAt,
-        subreddits: addReddit(state.subreddits, action.subreddit)
+        lastUpdated: action.receivedAt
       })
     default:
       return state
   }
 }
 
-function postsBySubreddit(state = {subreddits:["frontend", "Spock"]}, action) {
+function postsBySubreddit(state = { }, action) {
   switch (action.type) {
     case INVALIDATE_SUBREDDIT:
     case RECEIVE_POSTS:

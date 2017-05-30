@@ -37,13 +37,13 @@ class AsyncApp extends Component {
   }
 
   render() {
-    const { subreddits, selectedSubreddit, posts, isFetching, lastUpdated } = this.props
+    const { selectedSubreddit, posts, isFetching, lastUpdated } = this.props
     return (
       <div>
-        <h2>MRains Reditt Browser Example</h2>
+        <h2>Reditt Browser</h2>
         <Picker value={selectedSubreddit}
                 onChange={this.handleChange}
-                options={subreddits} />
+                options={[ 'reactjs', 'frontend' ]} />
         <p>
           {lastUpdated &&
             <span>
@@ -87,8 +87,7 @@ function mapStateToProps(state) {
   const {
     isFetching,
     lastUpdated,
-    items: posts,
-    subreddits
+    items: posts
   } = postsBySubreddit[selectedSubreddit] || {
     isFetching: true,
     items: []
@@ -98,8 +97,7 @@ function mapStateToProps(state) {
     selectedSubreddit,
     posts,
     isFetching,
-    lastUpdated,
-    subreddits:["spock"]
+    lastUpdated
   }
 }
 
