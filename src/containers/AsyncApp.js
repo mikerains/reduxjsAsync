@@ -1,11 +1,13 @@
 import React, { Component, PropTypes } from 'react'
-import { connect } from 'react-redux'
+import { connect } from 'react-redux' 
 import { selectSubreddit, fetchPostsIfNeeded, invalidateSubreddit } from '../actions'
 import Picker from '../components/Picker'
 import Posts from '../components/Posts'
 
 class AsyncApp extends Component {
   constructor(props) {
+    console.log('AsyncApp ctor, props:');
+    console.log(props);
     super(props)
     this.handleChange = this.handleChange.bind(this)
     this.handleRefreshClick = this.handleRefreshClick.bind(this)
@@ -36,7 +38,9 @@ class AsyncApp extends Component {
     dispatch(fetchPostsIfNeeded(selectedSubreddit))
   }
 
-  render() {
+  render() {    
+    console.log('AsyncApp.render, props:');
+    console.log(this.props);
     const { selectedSubreddit, posts, isFetching, lastUpdated } = this.props
     return (
       <div>
@@ -83,6 +87,8 @@ AsyncApp.propTypes = {
 }
 
 function mapStateToProps(state) {
+  console.log('mapStateToProps(state) the value of state is:');
+  console.log(state);
   const { selectedSubreddit, postsBySubreddit } = state
   const {
     isFetching,

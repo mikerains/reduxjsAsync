@@ -56,7 +56,11 @@ function shouldFetchPosts(state, subreddit) {
 }
 
 export function fetchPostsIfNeeded(subreddit) {
+  console.log('actions.fetchPostsIfNeeded subreddit is:');
+  console.log(subreddit);
   return (dispatch, getState) => {
+    console.log('actions.fetchPostsIfNeeded function getState() is:');
+    console.log(getState());
     if (shouldFetchPosts(getState(), subreddit)) {
       return dispatch(fetchPosts(subreddit))
     }
