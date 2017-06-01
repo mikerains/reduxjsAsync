@@ -1,6 +1,8 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { selectSubreddit, fetchPostsIfNeeded, invalidateSubreddit } from '../actions'
+import { fetchConfigValue, setProjectName, setConfigKey } from '../actions/ConfigActions'
+
 import Picker from '../components/Picker'
 import Posts from '../components/Posts'
 
@@ -9,6 +11,7 @@ class AsyncApp extends Component {
     super(props)
     this.handleChange = this.handleChange.bind(this)
     this.handleRefreshClick = this.handleRefreshClick.bind(this)
+    this.handleGetConfig = this.handleGetConfig.bind(this)
   }
 
   componentDidMount() {
@@ -36,11 +39,36 @@ class AsyncApp extends Component {
     dispatch(fetchPostsIfNeeded(selectedSubreddit))
   }
 
+  handleChangeProjectName(projectName) {
+    console.log('handleChangeProjectName fired: ' + projectName);
+    this.props.dispatch(setProjectName(projectName))
+  }
+
+  handleChangeConfigKey(configKey) {
+    console.log('handleChangeConfigKey fired: ' + configKey);
+    this.props.dispatch(setConfigKey(configKey))
+  }
+
+  handleGetConfig(e) {
+    console.log('handleGetConfig fired');
+    console.log(e.target);
+    console.log(this.props);
+    e.preventDefault();
+    const {dispatch, projectName, configKey } = this.props
+    dispatch(fetchConfigValue(projectName, configKey))
+  }
+
   render() {
-    const { selectedSubreddit, posts, isFetching, lastUpdated } = this.props
+    const { selectedSubreddit, posts, isFetching, lastUpdated, projectName, configKey, configValue } = this.props
     return (
       <div>
         <h2>Reditt Browser</h2>
+        <div>
+            Project:<input type="text" value={projectName} onChange={e => this.handleChangeProjectName(e.target.value)}/>
+            Key:<input type="text" value={configKey} onChange={e => this.handleChangeConfigKey(e.target.value)}/>
+            <button onClick={this.handleGetConfig}>Get</button>
+            Value:{configValue}
+        </div>
         <Picker value={selectedSubreddit}
                 onChange={this.handleChange}
                 options={[ 'reactjs', 'frontend' ]} />
@@ -83,7 +111,7 @@ AsyncApp.propTypes = {
 }
 
 function mapStateToProps(state) {
-  const { selectedSubreddit, postsBySubreddit } = state
+  const { selectedSubreddit, postsBySubreddit, config } = state
   const {
     isFetching,
     lastUpdated,
@@ -93,11 +121,20 @@ function mapStateToProps(state) {
     items: []
   }
 
+  const {
+    projectName,
+    configKey,
+    configValue
+  } = config
+
   return {
     selectedSubreddit,
     posts,
     isFetching,
-    lastUpdated
+    lastUpdated,
+    projectName,
+    configKey,
+    configValue,
   }
 }
 
