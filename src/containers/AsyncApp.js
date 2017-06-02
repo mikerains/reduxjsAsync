@@ -5,6 +5,7 @@ import { fetchConfigValue, setProjectName, setConfigKey } from '../actions/Confi
 
 import Picker from '../components/Picker'
 import Posts from '../components/Posts'
+import FilterLink from './FilterLink'
 
 class AsyncApp extends Component {
   constructor(props) {
@@ -54,7 +55,7 @@ class AsyncApp extends Component {
     console.log(e.target);
     console.log(this.props);
     e.preventDefault();
-    const {dispatch, projectName, configKey } = this.props
+    const { dispatch, projectName, configKey } = this.props
     dispatch(fetchConfigValue(projectName, configKey))
   }
 
@@ -64,14 +65,17 @@ class AsyncApp extends Component {
       <div>
         <h2>Reditt Browser</h2>
         <div>
-            Project:<input type="text" value={projectName} onChange={e => this.handleChangeProjectName(e.target.value)}/>
-            Key:<input type="text" value={configKey} onChange={e => this.handleChangeConfigKey(e.target.value)}/>
-            <button onClick={this.handleGetConfig}>Get</button>
-            Value:{configValue}
+          Project:<input type="text" value={projectName} onChange={e => this.handleChangeProjectName(e.target.value)} />
+          Key:<input type="text" value={configKey} onChange={e => this.handleChangeConfigKey(e.target.value)} />
+          <br/>
+          <button onClick={this.handleGetConfig}>Get</button>
+          <br/>
+          Value:{configValue}
+          <FilterLink filter="config">Config Client </FilterLink>
         </div>
         <Picker value={selectedSubreddit}
-                onChange={this.handleChange}
-                options={[ 'reactjs', 'frontend' ]} />
+          onChange={this.handleChange}
+          options={['reactjs', 'frontend']} />
         <p>
           {lastUpdated &&
             <span>
@@ -81,7 +85,7 @@ class AsyncApp extends Component {
           }
           {!isFetching &&
             <a href='#'
-               onClick={this.handleRefreshClick}>
+              onClick={this.handleRefreshClick}>
               Refresh
             </a>
           }
@@ -107,7 +111,10 @@ AsyncApp.propTypes = {
   posts: PropTypes.array.isRequired,
   isFetching: PropTypes.bool.isRequired,
   lastUpdated: PropTypes.number,
-  dispatch: PropTypes.func.isRequired
+  dispatch: PropTypes.func.isRequired,
+  projectName: PropTypes.string,
+  configKey: PropTypes.string,
+  configValue: PropTypes.string
 }
 
 function mapStateToProps(state) {
@@ -117,9 +124,9 @@ function mapStateToProps(state) {
     lastUpdated,
     items: posts
   } = postsBySubreddit[selectedSubreddit] || {
-    isFetching: true,
-    items: []
-  }
+      isFetching: true,
+      items: []
+    }
 
   const {
     projectName,
